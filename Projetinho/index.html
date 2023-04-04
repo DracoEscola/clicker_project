@@ -29,8 +29,8 @@
             <div class="specials">
                 <ul>
                     <li>
-                        <button id="rebirthButton" onclick=rebirth()>
-                            <span>Rebirth: 2x money income</span>
+                        <button id="rebirthButton" onclick=rebirth(15000)>
+                            <span id="rebirthTxt">Rebirth: 2x money income</span>
                             <span id="rebirthValue"><br>$ 15.000</span>
                         </button>
                     </li>
@@ -57,18 +57,21 @@
                     moneyTxt.innerHTML = "$ " + money;
                     newValue = Math.round(price*1.15);
                     document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+newValue;
-                    document.getElementById("upgrade"+upgradeId).onclick = function onclick(event){
-                        increaseClick(value, newValue, upgradeId)
-                    };
+                    document.getElementById("upgrade"+upgradeId).onclick = function onclick(event){increaseClick(value, newValue, upgradeId)};
                 }
                 return;
             }
 
             function rebirth(value) {
-                if(money => value){
+                if(money >= value){
                     money = 0;
-                    clickValue = 1
+                    clickValue = 1;
                     rebirths++;
+                    newValue = Math.round(value*1.25);
+                    document.getElementById("rebirthValue").innerHTML = "<br>$ "+newValue;
+                    document.getElementById("rebirthTxt").innerHTML = "Rebirth: " + (rebirths+1) + "x money income";
+                    document.getElementById("rebirthButton").onclick = function onclick(event){rebirth(newValue)};
+                    moneyTxt.innerHTML = "$ " + money;
                 }
                 return;
             }

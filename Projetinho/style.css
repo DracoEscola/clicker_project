@@ -16,7 +16,7 @@ body h1 {
     text-shadow: 2px 2px 8px orange;  
 }
 
-aside {
+aside .upgrades {
     position: absolute;
     display: inline;
     right: 150px;
@@ -29,13 +29,20 @@ aside {
     padding-top: 128px;
 }
 
-.upgrades button {
+.upgrades button, .specials button {
     border-radius: 6px;
     height: 96px;
     width: 128px;
 }
 
-button:hover {
+.upgrades button:hover {
     background-color: lightskyblue;
     color: white;
+    box-shadow: 4px 4px 8px blue;
+}
+
+.specials button:hover {
+    background-color: rgb(158, 135, 4);
+    color: white;
+    box-shadow: 4px 4px 8px goldenrod;
 }
