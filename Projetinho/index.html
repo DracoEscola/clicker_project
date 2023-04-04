@@ -26,6 +26,16 @@
                     </li>
                 </ul>
             </div>
+            <div class="specials">
+                <ul>
+                    <li>
+                        <button id="rebirthButton" onclick=rebirth()>
+                            <span>Rebirth: 2x money income</span>
+                            <span id="rebirthValue"><br>$ 15.000</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </aside>
         <script>
             var clickButton = document.getElementById("clickButton");
@@ -50,6 +60,15 @@
                     document.getElementById("upgrade"+upgradeId).onclick = function onclick(event){
                         increaseClick(value, newValue, upgradeId)
                     };
+                }
+                return;
+            }
+
+            function rebirth(value) {
+                if(money => value){
+                    money = 0;
+                    clickValue = 1
+                    rebirths++;
                 }
                 return;
             }

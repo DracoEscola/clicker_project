@@ -16,15 +16,23 @@ body h1 {
     text-shadow: 2px 2px 8px orange;  
 }
 
+aside {
+    position: absolute;
+    display: inline;
+    right: 150px;
+}
+
 #clickButton {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 20px;
+    padding-top: 128px;
 }
 
-button {
-    border-radius: 4px;
+.upgrades button {
+    border-radius: 6px;
+    height: 96px;
+    width: 128px;
 }
 
 button:hover {
