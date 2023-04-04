@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>Clicker</title>
+    </head>
+    <body>
+        <header>
+            <h1 id="moneyTxt">$ 0</h1>
+        </header>
+        <img src="click_button.png" id="clickButton">
+        <aside>
+            <div class="upgrades">
+                <ul>
+                    <li>
+                        <button id="upgrade0" onclick=increaseClick(1,100,0)>
+                            <span>Upgrade: +1 Click Value</span>
+                            <span id="upgrade0value"><br>$ 100</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button id="upgrade1" onclick=increaseClick(5,300,1)>
+                            <span>Upgrade: +5 Click Value</span>
+                            <span id="upgrade1value"><br>$ 300</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <script>
+            var clickButton = document.getElementById("clickButton");
+            var moneyTxt = document.getElementById("moneyTxt");
+
+            var money = 0;
+            var clickValue = 1;
+            var rebirths = 1;
+
+            clickButton.addEventListener("click", () =>{
+                money += clickValue*rebirths;
+                moneyTxt.innerHTML = "$ " + money;
+            })
+
+            function increaseClick(value, price, upgradeId){
+                if(money >= price){
+                    clickValue += value;
+                    money -= price;
+                    moneyTxt.innerHTML = "$ " + money;
+                    newValue = Math.round(price*1.15);
+                    document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+newValue;
+                    document.getElementById("upgrade"+upgradeId).onclick = function onclick(event){
+                        increaseClick(value, newValue, upgradeId)
+                    };
+                }
+                return;
+            }
+        </script>
+    </body>
+</html>
