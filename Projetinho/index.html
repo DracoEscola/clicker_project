@@ -5,28 +5,19 @@
         <title>Clicker</title>
     </head>
     <body>
+
         <header>
-            <h1 id="moneyTxt">$ 0</h1>
-        </header>
-        <img src="click_button.png" id="clickButton">
-        <aside>
-            <div class="upgrades">
-                <ul>
-                    <li>
-                        <button id="upgrade0" onclick=increaseClick(1,100,0)>
-                            <span>Upgrade: +1 Click Value</span>
-                            <span id="upgrade0value"><br>$ 100</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button id="upgrade1" onclick=increaseClick(5,300,1)>
-                            <span>Upgrade: +5 Click Value</span>
-                            <span id="upgrade1value"><br>$ 300</span>
-                        </button>
-                    </li>
-                </ul>
+            <div class="statsContainer">
+                <h1 id="moneyTxt">$ 0</h1>
+                <p id="mpsTxt">0 MPS</p>
+                <button onclick="saveData()">Save</button>
+                <button onclick="loadData()">Load</button>
             </div>
-            <div class="specials">
+        </header>
+
+
+        <div class="container">
+            <div class="special_buttons">
                 <ul>
                     <li>
                         <button id="rebirthButton" onclick=rebirth(15000)>
@@ -36,14 +27,36 @@
                     </li>
                 </ul>
             </div>
-        </aside>
-        <script>
-            var clickButton = document.getElementById("clickButton");
-            var moneyTxt = document.getElementById("moneyTxt");
+            <img src="click_button.png" id="clickButton">
+            <div class="upgrade_buttons">
+                <ul>
+                    <li>
+                        <button id="upgrade0" onclick=increaseClick(1,100,0)>
+                            <span>Upgrade: +1 Click Value</span>
+                            <span id="upgrade0value"><br>$ 100</span>
+                        </button>
+                    </li>
+                    <li>
+                         <button id="upgrade1" onclick=increaseClick(5,300,1)>
+                            <span>Upgrade: +5 Click Value</span>
+                            <span id="upgrade1value"><br>$ 300</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-            var money = 0;
-            var clickValue = 1;
-            var rebirths = 1;
+
+        <script type="text/javascript" defer>
+            const clickButton = document.getElementById("clickButton");
+            const moneyTxt = document.getElementById("moneyTxt");
+            const mpsTxt = document.getElementById("mpsTxt");
+
+            let money = 0;
+            let mps = 0;
+            let clickValue = 1;
+            let rebirths = 1;
+            let upgradeAmount;
 
             clickButton.addEventListener("click", () =>{
                 money += clickValue*rebirths;
@@ -55,7 +68,8 @@
                     clickValue += value;
                     money -= price;
                     moneyTxt.innerHTML = "$ " + money;
-                    newValue = Math.round(price*1.15);
+                    upgradeAmount[upgradeId]++;
+                    let newValue = Math.round(price*1.15);
                     document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+newValue;
                     document.getElementById("upgrade"+upgradeId).onclick = function onclick(event){increaseClick(value, newValue, upgradeId)};
                 }
@@ -67,7 +81,7 @@
                     money = 0;
                     clickValue = 1;
                     rebirths++;
-                    newValue = Math.round(value*1.25);
+                    let newValue = Math.round(value*1.25);
                     document.getElementById("rebirthValue").innerHTML = "<br>$ "+newValue;
                     document.getElementById("rebirthTxt").innerHTML = "Rebirth: " + (rebirths+1) + "x money income";
                     document.getElementById("rebirthButton").onclick = function onclick(event){rebirth(newValue)};
@@ -75,6 +89,47 @@
                 }
                 return;
             }
+
+            function updateMoneyWithMPS() {
+                if(mps){
+                    money += mps*rebirths;
+                    moneyTxt.innerHTML = "$ " + money;
+                }
+            }
+
+            function saveData() {
+                if(money) {
+                    localStorage.setItem("money", money)
+                }
+                if(mps) {
+                    localStorage.setItem("mps", mps)
+                }
+                if(rebirths) {
+                    localStorage.setItem("rebirths", rebirths)
+                }
+                if(clickValue) {
+                    localStorage.setItem("clickValue", clickValue)
+                }
+            }
+
+            function loadData() {
+                if(localStorage.getItem("money")) {
+                    money = parseInt(localStorage.getItem("money"));
+                    moneyTxt.innerHTML = "$ " + money;
+                }
+                if(localStorage.getItem("mps")) {
+                    mps = parseInt(localStorage.getItem("mps"));
+                    mpsTxt.innerHTML = mps + " MPS";
+                }
+                if(localStorage.getItem("rebirths")) {
+                    rebirths = parseInt(localStorage.getItem("rebirths"));
+                }
+                if(localStorage.getItem("clickValue")) {
+                    clickValue = parseInt(localStorage.getItem("clickValue"));
+                }
+            }
+
+            setInterval(updateMoneyWithMPS, 1000)
         </script>
     </body>
 </html>
