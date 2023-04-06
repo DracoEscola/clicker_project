@@ -56,7 +56,7 @@
             let mps = 0;
             let clickValue = 1;
             let rebirths = 1;
-            let upgradeAmount;
+            let upgradeAmount = Array(document.getElementsByClassName("upgrade_buttons").length+1).fill("0",0,3);
 
             clickButton.addEventListener("click", () =>{
                 money += clickValue*rebirths;
@@ -64,14 +64,18 @@
             })
 
             function increaseClick(value, price, upgradeId){
+                if(upgradeAmount[upgradeId]>0) {
+                    newPrice = Math.round(price*(1.15^upgradeAmount[upgradeId]))
+                }
                 if(money >= price){
                     clickValue += value;
                     money -= price;
                     moneyTxt.innerHTML = "$ " + money;
                     upgradeAmount[upgradeId]++;
-                    let newValue = Math.round(price*1.15);
-                    document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+newValue;
-                    document.getElementById("upgrade"+upgradeId).onclick = function onclick(event){increaseClick(value, newValue, upgradeId)};
+                    newPrice = Math.round(price*(1.15^upgradeAmount[upgradeId]))
+                    alert(price)
+                    alert(upgradeAmount[upgradeId])
+                    document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+price;
                 }
                 return;
             }
