@@ -29,7 +29,7 @@
             </div>
             <img src="click_button.png" id="clickButton">
             <div class="upgrade_buttons">
-                <ul>
+                <ul id="upgrade_buttons">
                     <li>
                         <button id="upgrade0" onclick=increaseClick(1,100,0)>
                             <span>Upgrade: +1 Click Value</span>
@@ -56,7 +56,7 @@
             let mps = 0;
             let clickValue = 1;
             let rebirths = 1;
-            let upgradeAmount = Array(document.getElementsByClassName("upgrade_buttons").length+1).fill("0",0,3);
+            let upgradeAmount = Array(document.getElementsByClassName("upgrade_buttons").length+1).fill("0",0);
 
             clickButton.addEventListener("click", () =>{
                 money += clickValue*rebirths;
@@ -73,23 +73,23 @@
                     moneyTxt.innerHTML = "$ " + money;
                     upgradeAmount[upgradeId]++;
                     price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
-                    console.log(upgradeAmount[upgradeId])
-                    console.warn(Math.round(price*(1.15**upgradeAmount[upgradeId])))
                     document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+price;
                 }
                 return;
             }
 
             function rebirth(value) {
+                if(rebirths > 0){
+                    value = Math.round(value*(1.25**rebirths))
+                }
                 if(money >= value){
                     money = 0;
                     clickValue = 1;
                     rebirths++;
-                    let newValue = Math.round(value*1.25);
-                    document.getElementById("rebirthValue").innerHTML = "<br>$ "+newValue;
+                    value = Math.round(value*(1.25**rebirths));
+                    document.getElementById("rebirthValue").innerHTML = "<br>$ "+value;
                     document.getElementById("rebirthTxt").innerHTML = "Rebirth: " + (rebirths+1) + "x money income";
-                    document.getElementById("rebirthButton").onclick = function onclick(event){rebirth(newValue)};
-                    upgradeAmount = Array(document.getElementsByClassName("upgrade_buttons").length+1).fill("0",0,3);
+                    upgradeAmount = Array(document.getElementsByClassName("upgrade_buttons").length+1).fill("0",0);
                     moneyTxt.innerHTML = "$ " + money;
                     mpsTxt.innerHTML = mps + " MPS";
                 }
@@ -135,7 +135,18 @@
                 }
             }
 
-            function updateButtonValues();
+            function updateButtonValues() {
+                let li = document.getElementById("upgrade_buttons").getElementsByTagName("li");
+                for (i = 0; i < li.length; i++){
+                    let button = li[i].getElementsByTagName("button");
+                    let id = parseInt(button[0].id.replace("upgrade",""));
+                    let price = parseInt(document.getElementById("upgrade"+id+"value").innerHTML.replace("<br>$ ",""));
+                    if(upgradeAmount[parseInt(upgradeId)] > 0){
+                        price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
+                        document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+price;
+                    };
+                }
+            };
 
             setInterval(updateMoneyWithMPS, 1000)
         </script>
