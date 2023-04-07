@@ -65,16 +65,16 @@
 
             function increaseClick(value, price, upgradeId){
                 if(upgradeAmount[upgradeId]>0) {
-                    newPrice = Math.round(price*(1.15^upgradeAmount[upgradeId]))
+                    price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
                 }
                 if(money >= price){
                     clickValue += value;
                     money -= price;
                     moneyTxt.innerHTML = "$ " + money;
                     upgradeAmount[upgradeId]++;
-                    newPrice = Math.round(price*(1.15^upgradeAmount[upgradeId]))
-                    alert(price)
-                    alert(upgradeAmount[upgradeId])
+                    price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
+                    console.log(upgradeAmount[upgradeId])
+                    console.warn(Math.round(price*(1.15**upgradeAmount[upgradeId])))
                     document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+price;
                 }
                 return;
@@ -89,7 +89,9 @@
                     document.getElementById("rebirthValue").innerHTML = "<br>$ "+newValue;
                     document.getElementById("rebirthTxt").innerHTML = "Rebirth: " + (rebirths+1) + "x money income";
                     document.getElementById("rebirthButton").onclick = function onclick(event){rebirth(newValue)};
+                    upgradeAmount = Array(document.getElementsByClassName("upgrade_buttons").length+1).fill("0",0,3);
                     moneyTxt.innerHTML = "$ " + money;
+                    mpsTxt.innerHTML = mps + " MPS";
                 }
                 return;
             }
@@ -132,6 +134,8 @@
                     clickValue = parseInt(localStorage.getItem("clickValue"));
                 }
             }
+
+            function updateButtonValues();
 
             setInterval(updateMoneyWithMPS, 1000)
         </script>
