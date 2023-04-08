@@ -79,7 +79,7 @@
             }
 
             function rebirth(value) {
-                if(rebirths > 0){
+                if(rebirths > 1){
                     value = Math.round(value*(1.25**rebirths))
                 }
                 if(money >= value){
@@ -105,16 +105,19 @@
 
             function saveData() {
                 if(money) {
-                    localStorage.setItem("money", money)
+                    localStorage.setItem("money", money);
                 }
                 if(mps) {
-                    localStorage.setItem("mps", mps)
+                    localStorage.setItem("mps", mps);
                 }
-                if(rebirths) {
-                    localStorage.setItem("rebirths", rebirths)
+                if(rebirths>1) {
+                    localStorage.setItem("rebirths", rebirths);
                 }
                 if(clickValue) {
-                    localStorage.setItem("clickValue", clickValue)
+                    localStorage.setItem("clickValue", clickValue);
+                }
+                if(upgradeAmount) {
+                    localStorage.setItem("upgradeAmount", JSON.stringify(upgradeAmount));
                 }
             }
 
@@ -133,17 +136,28 @@
                 if(localStorage.getItem("clickValue")) {
                     clickValue = parseInt(localStorage.getItem("clickValue"));
                 }
+                if(localStorage.getItem("upgradeAmount")) {
+                    upgradeAmount = JSON.parse(localStorage.getItem("upgradeAmount"));
+                    updateUpgradeButtonValues();
+                }
             }
 
-            function updateButtonValues() {
+            function updateUpgradeButtonValues() {
                 let li = document.getElementById("upgrade_buttons").getElementsByTagName("li");
                 for (i = 0; i < li.length; i++){
                     let button = li[i].getElementsByTagName("button");
                     let id = parseInt(button[0].id.replace("upgrade",""));
                     let price = parseInt(document.getElementById("upgrade"+id+"value").innerHTML.replace("<br>$ ",""));
-                    if(upgradeAmount[parseInt(upgradeId)] > 0){
-                        price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
-                        document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+price;
+                    if(upgradeAmount[parseInt(id)] > 0){
+                        price = Math.round(price*(1.15**upgradeAmount[id]))
+                        document.getElementById("upgrade"+id+"value").innerHTML = "<br>$ "+price;
+                    }
+                    else{
+
+                        // Feito de uma maneira muito podre, corrigir assim que possível
+
+                        price = parseInt(button[0].onclick.toString().split(",")[1]);
+                        document.getElementById("upgrade"+id+"value").innerHTML = "<br>$ "+price;
                     };
                 }
             };
