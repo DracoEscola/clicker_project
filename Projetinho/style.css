@@ -5,6 +5,7 @@
     --color4: #FF9671;
     --color5: #FFC75F;
     --color6: #F9F871;
+    user-select: none;
 }
 
 @font-face {
@@ -94,4 +95,14 @@ ul {
         rgba(186, 12, 248, 1) 80%,
         rgba(251, 7, 217, 1) 90%,
         rgba(255, 0, 0, 1) 100%) 10%; 
+}
+
+#clickTextAnimation {
+    position: absolute;
+    display: none;
+    color: var(--color3);
+    font-size: 200%;
+    padding: 5px;
+    text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+    1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
 }

@@ -27,7 +27,8 @@
                     </li>
                 </ul>
             </div>
-            <img src="assets/click_button1.png" id="clickButton">
+            <img src="assets/click_button1.png" id="clickButton" alt="Clique Aqui! :D">
+            <div id="clickTextAnimation"></div>
             <div class="upgrade_buttons">
                 <ul id="upgrade_buttons">
                     <li>
@@ -51,6 +52,7 @@
             const clickButton = document.getElementById("clickButton");
             const moneyTxt = document.getElementById("moneyTxt");
             const mpsTxt = document.getElementById("mpsTxt");
+            const clickTxt = document.getElementById("clickTextAnimation");
 
             let money = 0;
             let mps = 0;
@@ -61,6 +63,15 @@
             clickButton.addEventListener("click", () =>{
                 money += clickValue*rebirths;
                 moneyTxt.innerHTML = "$ " + money;
+
+                clickTxt.innerHTML = `+${clickValue*rebirths}`;
+                clickTxt.style.display = 'block';
+                clickTxt.style.left = `${event.pageX+20}px`;
+                clickTxt.style.top = `${event.pageY+20}px`;
+
+                setTimeout(() => {
+                    clickTxt.style.display = 'none';
+                }, 500);
             })
 
             function increaseClick(value, price, upgradeId){
