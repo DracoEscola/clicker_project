@@ -27,7 +27,7 @@
                     </li>
                 </ul>
             </div>
-            <img src="click_button.png" id="clickButton">
+            <img src="assets/click_button1.png" id="clickButton">
             <div class="upgrade_buttons">
                 <ul id="upgrade_buttons">
                     <li>
@@ -73,25 +73,43 @@
                     moneyTxt.innerHTML = "$ " + money;
                     upgradeAmount[upgradeId]++;
                     price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
-                    document.getElementById("upgrade"+upgradeId+"value").innerHTML = "<br>$ "+price;
+                    document.getElementById(`upgrade${upgradeId}value`).innerHTML = "<br>$ "+price;
+                }
+                return;
+            }
+
+            function increaseMPS(value, price, upgradeId){
+                if(upgradeAmount[upgradeId]>0) {
+                    price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
+                }
+                if(money >= price){
+                    mps += value;
+                    money -= price;
+                    moneyTxt.innerHTML = "$ " + money;
+                    mpsTxt.innerHTML = mps + " MPS";
+                    upgradeAmount[upgradeId]++;
+                    price = Math.round(price*(1.15**upgradeAmount[upgradeId]))
+                    document.getElementById(`upgrade${upgradeId}value`).innerHTML = "<br>$ "+price;
                 }
                 return;
             }
 
             function rebirth(value) {
                 if(rebirths > 1){
-                    value = Math.round(value*(1.25**rebirths))
+                    value = Math.round(value*(1.25**(rebirths-1)))
                 }
                 if(money >= value){
                     money = 0;
                     clickValue = 1;
                     rebirths++;
-                    value = Math.round(value*(1.25**rebirths));
+                    value = Math.round(value*(1.25**(rebirths-1)));
                     document.getElementById("rebirthValue").innerHTML = "<br>$ "+value;
                     document.getElementById("rebirthTxt").innerHTML = "Rebirth: " + (rebirths+1) + "x money income";
                     upgradeAmount = Array(document.getElementsByClassName("upgrade_buttons").length+1).fill("0",0);
                     moneyTxt.innerHTML = "$ " + money;
                     mpsTxt.innerHTML = mps + " MPS";
+                    clickButton.src = `assets/click_button${rebirths}.png`;
+                    updateUpgradeButtonValues();
                 }
                 return;
             }
@@ -104,6 +122,7 @@
             }
 
             function saveData() {
+                localStorage.clear();
                 if(money) {
                     localStorage.setItem("money", money);
                 }
@@ -139,26 +158,36 @@
                 if(localStorage.getItem("upgradeAmount")) {
                     upgradeAmount = JSON.parse(localStorage.getItem("upgradeAmount"));
                     updateUpgradeButtonValues();
+                    updateRebirthButtonValue();
                 }
             }
 
             function updateUpgradeButtonValues() {
                 let li = document.getElementById("upgrade_buttons").getElementsByTagName("li");
                 for (i = 0; i < li.length; i++){
-                    let button = li[i].getElementsByTagName("button");
-                    let id = parseInt(button[0].id.replace("upgrade",""));
-                    let price = parseInt(document.getElementById("upgrade"+id+"value").innerHTML.replace("<br>$ ",""));
+                    let button = li[i].getElementsByTagName("button")[0];
+                    let id = parseInt(button.id.replace("upgrade",""),10);
+                    let price = parseInt(document.getElementById(`upgrade${id}value`).textContent.replace("$ ",""));
                     if(upgradeAmount[parseInt(id)] > 0){
                         price = Math.round(price*(1.15**upgradeAmount[id]))
-                        document.getElementById("upgrade"+id+"value").innerHTML = "<br>$ "+price;
+                        document.getElementById(`upgrade${id}value`).textContent = "$ "+price;
                     }
                     else{
 
                         // Feito de uma maneira muito podre, corrigir assim que possível
 
-                        price = parseInt(button[0].onclick.toString().split(",")[1]);
-                        document.getElementById("upgrade"+id+"value").innerHTML = "<br>$ "+price;
+                        price = parseInt(button.onclick.toString().split(",")[1], 10);
+                        document.getElementById(`upgrade${id}value`).textContent = "$ "+price;
                     };
+                }
+            };
+
+            function updateRebirthButtonValue() {
+                let button = document.getElementById("rebirthButton");
+                if(rebirths>1){
+                    let spans = button.getElementsByTagName("span");
+                    spans[0].innerHTML = "Rebirth: " + (rebirths+1) +"x money income";
+                    spans[1].innerHTML = "<br>$ " + (15000*(1.25**(rebirths-1)));
                 }
             };
 
